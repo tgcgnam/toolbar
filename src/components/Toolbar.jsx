@@ -1,40 +1,78 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 // import Button from "./Button";
 import {
   faBold,
   faItalic,
-  faL,
   faUnderline,
+ 
 } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
-// const icons = [faBold, faItalic, faUnderline];
 function Toolbar() {
-  const [show, setShow] = useState(false);
-  const [show1, setShow1] = useState(false);
-  const [show2, setShow2] = useState(false);
-  const bold = "Input Bold";
-  const italic = "Input Italic";
-  const underline = "Input Underline";
+  const textArea = useRef();
+  const [markdown, setMarkdown] = useState();
+
+  const bold = "****";
+  const italic = "**";
+  const underline = "++++";
+  const h1 = "# "
+  const h2 = "## "
+  const h3 = "### "
+
+  const txtToCurrentPos = (format) => {
+    const thisTxtArea = textArea.current;
+    const pos = thisTxtArea.selectionStart;
+    const end = thisTxtArea.selectionEnd;
+    const value = thisTxtArea.value;
+    thisTxtArea.value = `${value.slice(0, pos)}${format}${value.slice(pos)}`;
+    thisTxtArea.focus();
+    thisTxtArea.selectionEnd = end + format.length / 2;
+  };
 
   return (
-    <>
+    <div className="app">
       <div className="toolbar">
-        <button onClick={() => setShow(!show)}>
-          <FontAwesomeIcon icon={faBold} />
-        </button>
-        <button onClick={() => setShow1(!show1)}>
-          <FontAwesomeIcon icon={faItalic} />
-        </button>
-        <button onClick={() => setShow2(!show2)}>
-          <FontAwesomeIcon icon={faUnderline} />
-        </button>
+        <div className="toolbar-left">
+          <button onClick={() => txtToCurrentPos(h1 + " ")}>
+            <FontAwesomeIcon icon="fa-solid fa-h1" />
+            H1
+          </button>
+          <button onClick={() => txtToCurrentPos(h2 + "  ")}>
+            <FontAwesomeIcon icon="fa-solid fa-h1" />
+            H2
+          </button>
+          <button onClick={() => txtToCurrentPos(h3 + "   ")}>
+            <FontAwesomeIcon icon="fa-solid fa-h1" />
+            H3
+          </button>
+          <button onClick={() => txtToCurrentPos(bold)}>
+            <FontAwesomeIcon icon={faBold} />
+          </button>
+          <button onClick={() => txtToCurrentPos(italic)}>
+            <FontAwesomeIcon icon={faItalic} />
+          </button>
+          <button onClick={() => txtToCurrentPos(underline)}>
+            <FontAwesomeIcon icon={faUnderline} />
+          </button>
+        </div>
+        <div className="toolbar-right">
+          <button>A</button>
+        </div>
       </div>
-      <textarea name="" id="" cols="30" rows="10"></textarea>
-      <div>{show && bold}</div>
-      <div>{show1 && italic}</div>
-      <div>{show2 && underline}</div>
-    </>
+      <div className="markdown__container">
+        <div className="input-type">
+          <textarea
+            ref={textArea}
+            value={markdown}
+            onChange={(e) => setMarkdown(e.target.value)}
+          />
+        </div>
+        <div className="preview">
+          <ReactMarkdown children={markdown} className="markdown__preview" />
+        </div>
+      </div>
+    </div>
   );
 }
 

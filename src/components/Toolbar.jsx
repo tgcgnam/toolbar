@@ -8,7 +8,7 @@ import {
   faMaximize,
 } from "@fortawesome/free-solid-svg-icons";
 import Preview from "./Preview/Preview";
-import ButtonIcon from "./Button";
+import ButtonIcon from "./Button/Button";
 
 import "../app.css";
 

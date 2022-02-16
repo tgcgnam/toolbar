@@ -1,24 +1,25 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-// import Button from "./Button";
+import { useRef, useContext } from "react";
+import { GlobalContext } from "../gLobal";
 import {
   faBold,
   faItalic,
   faUnderline,
- 
+  faMaximize,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState, useRef } from "react";
+import Preview from "./Preview/Preview";
+import ButtonIcon from "./Button";
+
+import "../app.css";
 
 function Toolbar() {
-  const textArea = useRef();
-  const [markdown, setMarkdown] = useState();
-
   const bold = "****";
   const italic = "**";
   const underline = "++++";
-  const h1 = "# "
-  const h2 = "## "
-  const h3 = "### "
+
+  const { markdown, setMarkdown } = useContext(GlobalContext);
+
+  const textArea = useRef();
 
   const txtToCurrentPos = (format) => {
     const thisTxtArea = textArea.current;
@@ -34,30 +35,20 @@ function Toolbar() {
     <div className="app">
       <div className="toolbar">
         <div className="toolbar-left">
-          <button onClick={() => txtToCurrentPos(h1 + " ")}>
-            <FontAwesomeIcon icon="fa-solid fa-h1" />
-            H1
-          </button>
-          <button onClick={() => txtToCurrentPos(h2 + "  ")}>
-            <FontAwesomeIcon icon="fa-solid fa-h1" />
-            H2
-          </button>
-          <button onClick={() => txtToCurrentPos(h3 + "   ")}>
-            <FontAwesomeIcon icon="fa-solid fa-h1" />
-            H3
-          </button>
-          <button onClick={() => txtToCurrentPos(bold)}>
+          <ButtonIcon handleClick={() => txtToCurrentPos(bold)}>
             <FontAwesomeIcon icon={faBold} />
-          </button>
-          <button onClick={() => txtToCurrentPos(italic)}>
+          </ButtonIcon>
+          <ButtonIcon handleClick={() => txtToCurrentPos(italic)}>
             <FontAwesomeIcon icon={faItalic} />
-          </button>
-          <button onClick={() => txtToCurrentPos(underline)}>
+          </ButtonIcon>
+          <ButtonIcon handleClick={() => txtToCurrentPos(underline)}>
             <FontAwesomeIcon icon={faUnderline} />
-          </button>
+          </ButtonIcon>
         </div>
         <div className="toolbar-right">
-          <button>A</button>
+          <ButtonIcon handleClick={underline}>
+            <FontAwesomeIcon icon={faMaximize} />
+          </ButtonIcon>
         </div>
       </div>
       <div className="markdown__container">
@@ -68,9 +59,7 @@ function Toolbar() {
             onChange={(e) => setMarkdown(e.target.value)}
           />
         </div>
-        <div className="preview">
-          <ReactMarkdown children={markdown} className="markdown__preview" />
-        </div>
+        <Preview />
       </div>
     </div>
   );
